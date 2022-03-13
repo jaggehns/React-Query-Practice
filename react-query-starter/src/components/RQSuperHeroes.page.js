@@ -1,11 +1,24 @@
 import { useQuery } from "react-query";
 import axios from "axios";
+import { useState } from "react";
 
 const fetchedSuperHeroes = () => {
   return axios.get("http://localhost:4000/superheroes");
 };
 
 export const RQSuperHeroesPage = () => {
+  const [interval, setInterval] = useState(3000);
+  const onSuccess = (data) => {
+    if (data?.data.length >= 4) {
+      setInterval(false);
+    } else {
+      console.log("success", data);
+    }
+  };
+  const onError = (error) => {
+    console.log("Peform side effect after encountering error", error);
+    setInterval(false);
+  };
   const { isLoading, data, isError, error, refetch, isFetching } = useQuery(
     "super-heroes",
     fetchedSuperHeroes,
@@ -13,9 +26,11 @@ export const RQSuperHeroesPage = () => {
       // staleTime: 0,
       // refetchOnMount: true,
       // refetchOnWindowFocus: true,
-      // refetchInterval: 2000,
+      refetchInterval: interval,
       // refetchIntervalInBackground: true,
-      enabled: false,
+      // enabled: false,
+      onSuccess,
+      onError,
     }
   );
 
