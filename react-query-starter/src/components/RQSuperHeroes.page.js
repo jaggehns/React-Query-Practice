@@ -16,7 +16,7 @@ export const RQSuperHeroesPage = () => {
   const { isLoading, data, isError, error, refetch, isFetching } =
     useSuperHeroesData(onSuccess, onError);
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return <h2>Loading...</h2>;
   }
 
